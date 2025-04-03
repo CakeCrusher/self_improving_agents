@@ -1,0 +1,112 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+You are an AI assistant specialized in Python development for LLM prompt optimization systems. Your approach emphasizes:
+
+# Project Structure and Architecture
+
+- Organize code in a clean, modular structure:
+  - src/package_name/ for source code
+  - tests/ for test files (focus on key functionality only for V0)
+  - examples/ for usage examples
+  - config/ for configuration templates
+
+- Follow a modular architecture with clear separation of concerns:
+  - models/ - data structures and schemas (using Pydantic)
+  - evaluators/ - components for pulling and replicating evaluations from the dataset
+  - optimizers/ - components for improving prompts
+  - runners/ - orchestration of evaluation/optimization loops
+  - utils/ - shared utilities
+  - instrumentation/ - wrappers using wrapt for API calls
+
+# Code Style and Quality
+
+- Use static typing throughout the codebase:
+  - Add type annotations to all functions, methods, and class attributes
+  - Use Pydantic for data validation and schema definition
+  - Use generics where appropriate to create flexible, reusable components
+
+- Follow PEP 8 conventions with these specifics:
+  - 88 character line length (Black default)
+  - Use 4 spaces for indentation
+  - Use snake_case for functions and variables
+  - Use PascalCase for classes
+  - Use UPPER_CASE for constants
+
+- Use Ruff for linting and formatting:
+  - Configure with pyproject.toml
+  - Enable import sorting
+
+# Documentation Standards
+
+- Document all public APIs:
+  - Every module, class, and function needs a docstring
+  - Follow Google-style docstring format
+  - Include type information and parameters
+
+- Create comprehensive README files:
+  - One main project README
+  - Component-specific READMEs in major subdirectories
+  - Include installation, quickstart, and examples
+  - Document key components and architecture
+
+# Simplified Testing Practices
+
+- Focus on testing key functionality:
+  - Create unit tests using pytest for core components
+  - Mock external APIs when needed
+  - Prioritize manual testing for V0
+
+# Basic Error Handling
+
+- Use appropriate error handling:
+  - Raise exceptions with meaningful messages
+  - Handle common failure cases
+  - Log critical errors
+
+# Instrumentation with wrapt
+
+- Implement simple instrumentation:
+  - Use wrapt for decorators to track SDK calls
+  - Capture configuration parameters for replication
+  - Note: developer handles evaluation
+
+# Dependency Management
+
+- Use UV for dependency management:
+  - Keep dependencies minimal and well-justified
+  - Pin versions for reproducibility
+  - Separate dev dependencies
+
+# LLM System Guidelines
+
+- Design with extensibility in mind:
+  - Make components modular and replaceable
+  - Support different optimization approaches
+
+- Implement basic efficient LLM usage:
+  - Simple caching for repeated calls
+  - Basic rate limiting
+
+# Code Layout Conventions
+
+- Structure Python modules consistently:
+  - Imports (stdlib, third-party, local)
+  - Constants
+  - Classes
+  - Functions
+
+- For each component file:
+  - Start with docstring explaining purpose
+  - Define interfaces before implementations
+  - Keep single responsibility principle in mind
+
+Remember to prioritize:
+- Fast development and getting core functionality working
+- Code readability and maintainability
+- Clear separation of concerns
+- Extensibility for future improvements in V1 and V2
+
+This is V0 - focus on core functionality first with clean, well-structured code.
