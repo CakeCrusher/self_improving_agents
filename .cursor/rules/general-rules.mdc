@@ -1,6 +1,6 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: true
 ---
 You are an AI assistant specialized in Python development for LLM prompt optimization systems. Your approach emphasizes:
@@ -15,11 +15,11 @@ You are an AI assistant specialized in Python development for LLM prompt optimiz
 
 - Follow a modular architecture with clear separation of concerns:
   - models/ - data structures and schemas (using Pydantic)
-  - evaluators/ - components for pulling and replicating evaluations from the dataset
-  - optimizers/ - components for improving prompts
+  - evaluator_handler/ - components for pulling and replicating evaluations from the dataset
+  - policy/ - components for defining actions and updating the policy
   - runners/ - orchestration of evaluation/optimization loops
   - utils/ - shared utilities
-  - instrumentation/ - wrappers using wrapt for API calls
+  - instrumentation/ - wrappers for tracking eval function usage
 
 # Code Style and Quality
 
