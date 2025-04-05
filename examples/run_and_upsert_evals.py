@@ -2,10 +2,11 @@ import os
 from datetime import datetime, timedelta
 
 from arize.exporter import ArizeExportClient
-from arize.pandas.logger import Client
 from arize.utils.types import Environments
 from dotenv import load_dotenv
 from phoenix.evals import OpenAIModel, llm_classify
+
+from self_improving_agents.evaluator_handler.tracker import EvaluatorTracker
 
 load_dotenv()
 print("\n\nSTARTING EVALUATION RUN")
@@ -146,7 +147,15 @@ primary_df["REWRITTEN_TEXT"] = primary_df["attributes.llm.output_messages"].appl
 print(primary_df["ORIGINAL_TEXT"])
 print(primary_df["REWRITTEN_TEXT"])
 
-evals_df = llm_classify(
+primary_df = primary_df.head(5)
+
+tracker = EvaluatorTracker()
+tracked_fromatting_classify = tracker.track(llm_classify, "formatting_classify")
+
+# TESTING
+primary_df = primary_df.head(5)
+
+evals_df = tracked_fromatting_classify(
     dataframe=primary_df,
     model=model,
     template=EVAL_TEMPLATE,
@@ -156,25 +165,28 @@ evals_df = llm_classify(
 
 print(evals_df)
 
+retrieved_eval_tracking = tracker.get("formatting_classify")
+print("\n\nRETRIEVED EVAL TRACKING:")
+print(retrieved_eval_tracking.model_dump_json(indent=2))
+
 # Create evaluation data for Arize upsert
 print("\n\nSTARTING UPSERT EVALS TO ARIZE")
 
 
-evals_df["eval.formatting_consistency_out_of_5.label"] = evals_df["label"]
-evals_df["eval.formatting_consistency_out_of_5.explanation"] = evals_df["explanation"]
+# evals_df["eval.formatting_consistency_out_of_5.label"] = evals_df["label"]
+# evals_df["eval.formatting_consistency_out_of_5.explanation"] = evals_df["explanation"]
 
-ARIZE_API_KEY = os.getenv("ARIZE_API_KEY")
-ARIZE_MODEL_ID = os.getenv("ARIZE_MODEL_ID")
+# ARIZE_API_KEY = os.getenv("ARIZE_API_KEY")
+# ARIZE_MODEL_ID = os.getenv("ARIZE_MODEL_ID")
 
-client = Client(
-    space_id=ARIZE_SPACE_ID,
-    developer_key=ARIZE_DEVELOPER_KEY,
-    api_key=ARIZE_API_KEY,
-)
+# client = Client(
+#     space_id=ARIZE_SPACE_ID,
+#     developer_key=ARIZE_DEVELOPER_KEY,
+#     api_key=ARIZE_API_KEY,
+# )
 
-evals_df["context.span_id"] = primary_df["context.span_id"]
+# evals_df["context.span_id"] = primary_df["context.span_id"]
+# # save evals_df to json
+# evals_df.to_json("evals_df.json", orient="records")
 
-# save evals_df to json
-evals_df.to_json("evals_df.json", orient="records")
-
-client.log_evaluations_sync(evals_df, ARIZE_MODEL_ID)
+# client.log_evaluations_sync(evals_df, ARIZE_MODEL_ID)
