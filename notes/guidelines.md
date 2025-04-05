@@ -69,3 +69,8 @@ It necessarily needs to be offline because it depends on visibility of evals, si
     - It hinges on having several timesteps to examine traces and select the most valuable trace and therefore has no purpose in the v0 of this project
 
 # Design
+PLease create the following workflow inside runner, first the user will establish the date from which  data will be fetched and onward,
+once that data is provided, the runner will export (get) data from arize (telemetry provider) as shown here  inside @run_and_upsert_evals.py and will return data as a df as shown in context in jsonofied form ,
+then you will get the evaluator data using the .get method ,
+Using those two data sources you will compose a model that will consist of a list of samples (chat_history (dict), output_generation (dict), eval_scores (Any), eval_reasoning (str)), actions (system_prompt (dict), model (str)), eval_constants (eval_template(str), eval_rails()).
+That will be our checkpoint,  then we will demo that inside @update_policy.py
