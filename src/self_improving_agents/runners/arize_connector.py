@@ -43,7 +43,7 @@ class ArizeConnector:
     def get_telemetry_data(
         self,
         start_date: datetime,
-        end_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = datetime.now(),
         limit: int = 100,
     ) -> pd.DataFrame:
         """Retrieve telemetry data from Arize.

@@ -90,7 +90,7 @@ class DataCollectionRunner:
         else:
             # TODO: should not raise error
             raise ValueError("System prompt not found")
-        model = telemetry_df.iloc[0].get("attributes.llm.invocation_parameters")
+        model = telemetry_df.iloc[0].get("attributes.llm.model_name")
         actions = Actions(system_prompt=system_prompt, model=model)
 
         # Build eval_constants

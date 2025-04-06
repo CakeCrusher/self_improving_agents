@@ -2,6 +2,7 @@ import os
 from datetime import datetime, timedelta
 
 from arize.exporter import ArizeExportClient
+from arize.pandas.logger import Client
 from arize.utils.types import Environments
 from dotenv import load_dotenv
 from phoenix.evals import OpenAIModel, llm_classify
@@ -173,20 +174,20 @@ print(retrieved_eval_tracking.model_dump_json(indent=2))
 print("\n\nSTARTING UPSERT EVALS TO ARIZE")
 
 
-# evals_df["eval.formatting_consistency_out_of_5.label"] = evals_df["label"]
-# evals_df["eval.formatting_consistency_out_of_5.explanation"] = evals_df["explanation"]
+evals_df["eval.formatting_consistency_out_of_5.label"] = evals_df["label"]
+evals_df["eval.formatting_consistency_out_of_5.explanation"] = evals_df["explanation"]
 
-# ARIZE_API_KEY = os.getenv("ARIZE_API_KEY")
-# ARIZE_MODEL_ID = os.getenv("ARIZE_MODEL_ID")
+ARIZE_API_KEY = os.getenv("ARIZE_API_KEY")
+ARIZE_MODEL_ID = os.getenv("ARIZE_MODEL_ID")
 
-# client = Client(
-#     space_id=ARIZE_SPACE_ID,
-#     developer_key=ARIZE_DEVELOPER_KEY,
-#     api_key=ARIZE_API_KEY,
-# )
+client = Client(
+    space_id=ARIZE_SPACE_ID,
+    developer_key=ARIZE_DEVELOPER_KEY,
+    api_key=ARIZE_API_KEY,
+)
 
-# evals_df["context.span_id"] = primary_df["context.span_id"]
-# # save evals_df to json
-# evals_df.to_json("evals_df.json", orient="records")
+evals_df["context.span_id"] = primary_df["context.span_id"]
+# save evals_df to json
+evals_df.to_json("evals_df.json", orient="records")
 
-# client.log_evaluations_sync(evals_df, ARIZE_MODEL_ID)
+client.log_evaluations_sync(evals_df, ARIZE_MODEL_ID)

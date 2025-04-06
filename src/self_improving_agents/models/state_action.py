@@ -25,8 +25,14 @@ class Sample(BaseModel):
 class Actions(BaseModel):
     """An action that can be taken by the system."""
 
-    system_prompt: str
-    model: str
+    system_prompt: str = Field(..., description="The system prompt to use for the LLM")
+    # TODO: should this be the entire model call object or should it be destructured???
+    # TODO: too many model names to support them as a literal must make this a string
+    # TODO: this is actually model name
+    model: str = Field(
+        ...,
+        description="The model identifier to use (e.g. gpt-4, gpt-3.5-turbo). Should be a valid model supported by the LLM provider.",
+    )
 
 
 class EvalConstant(BaseModel):

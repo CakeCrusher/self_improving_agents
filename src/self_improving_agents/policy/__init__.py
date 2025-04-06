@@ -4,6 +4,10 @@ This module contains components for defining actions and updating the policy.
 
 Classes:
     BasePolicy: Abstract base class for policy classes.
-    GradientBasedOptimizer: Optimizer using gradient-based methods.
-    EvolutionaryOptimizer: Optimizer using evolutionary algorithms.
+    LLMPolicyUpdater: Policy updater using LLM to determine optimal updates.
 """
+
+from .base import BasePolicy
+from .llm_policy_updater import LLMPolicyUpdater
+
+__all__ = ["BasePolicy", "LLMPolicyUpdater"]

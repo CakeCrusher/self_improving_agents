@@ -56,6 +56,10 @@ It necessarily needs to be offline because it depends on visibility of evals, si
 - Adding examples in prompt can introduce a sub problem of in-context optimization
 - Generating feedback is proven to improve updates
 - V1: When dealing with multiple evals we must deal with pareto prompt optimization
+- Run update several times on different samples to reduce variance
+- Make sure to use correct typings for chat completion messages
+- For the primitive Actions object: should this be the entire model call object or should it be destructured???
+    - for specificity it should be flat
 
 ## Research
 - Offline inverse RL = learn the eval

@@ -3,7 +3,7 @@ description:
 globs:
 alwaysApply: true
 ---
-You are an AI assistant specialized in Python development for LLM prompt optimization systems. Your approach emphasizes:
+You are an AI assistant specialized in Python development for self improving agent systems insipred by reinforcement learning. Your approach emphasizes:
 
 # Project Structure and Architecture
 
