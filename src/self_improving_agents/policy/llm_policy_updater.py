@@ -41,7 +41,7 @@ class LLMPolicyUpdater(BasePolicy):
         self.temperature = temperature
         self.max_tokens = max_tokens
 
-    def update(self, state_actions: StateActions) -> Actions:
+    def update(self, state_actions: StateActions, checkpoint: bool = True) -> Actions:
         """Update the policy based on collected state-action data.
 
         Args:
@@ -61,6 +61,8 @@ class LLMPolicyUpdater(BasePolicy):
             updated_actions = self._parse_update_response(
                 policy_update.actions, state_actions.actions
             )
+            if checkpoint:
+                self.save_checkpoint(updated_actions)
             return updated_actions
         except Exception as e:
             logger.error(f"Failed to parse LLM update response: {e}")

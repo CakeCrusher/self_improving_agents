@@ -60,6 +60,8 @@ It necessarily needs to be offline because it depends on visibility of evals, si
 - Make sure to use correct typings for chat completion messages
 - For the primitive Actions object: should this be the entire model call object or should it be destructured???
     - for specificity it should be flat
+- Need to be able to quantify evals as otherwise I am limited on evaluating comparisons using LLM. Need to also increase post update evaluation quantity.
+- Use arize internally for the RL system
 
 ## Research
 - Offline inverse RL = learn the eval
