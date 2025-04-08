@@ -62,6 +62,9 @@ It necessarily needs to be offline because it depends on visibility of evals, si
     - for specificity it should be flat
 - Need to be able to quantify evals as otherwise I am limited on evaluating comparisons using LLM. Need to also increase post update evaluation quantity.
 - Use arize internally for the RL system
+- Explore nested spans
+- Exploration ~= Temperature
+- Currentely dependent on chat completions llm calls and llm_categorize eval
 
 ## Research
 - Offline inverse RL = learn the eval

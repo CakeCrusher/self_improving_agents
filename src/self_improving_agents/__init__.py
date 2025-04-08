@@ -11,6 +11,7 @@ Modules:
     runners: Orchestration of evaluation/optimization loops.
     utils: Shared utilities.
     instrumentation: Wrappers for tracking eval function usage.
+    environment: Components for emulating LLM calls and evaluations.
 """
 
 __version__ = "0.1.0"

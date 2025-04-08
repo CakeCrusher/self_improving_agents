@@ -17,7 +17,7 @@ class EvalMetrics(BaseModel):
 class Sample(BaseModel):
     """A sample interaction with associated evaluations."""
 
-    chat_history: List[Dict[str, Any]]
+    chat_history: List[Dict[str, Any]]  # This is systemless
     output_generation: str
     evals: List[EvalMetrics]
 

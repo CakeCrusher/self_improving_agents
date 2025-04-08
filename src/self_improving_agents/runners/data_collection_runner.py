@@ -115,12 +115,10 @@ class DataCollectionRunner:
         # Collect samples
         samples = []
         for item in telemetry_json:
-            chat_history = []
-            if (
-                item.get("attributes.llm.input_messages")[0].get("message.role")
-                == "system"
-            ):
-                chat_history = item.get("attributes.llm.input_messages")[1:]
+            chat_history = json.loads(item.get("attributes.input.value"))["messages"]
+            if chat_history[0].get("role") == "system":
+                chat_history = chat_history[1:]
+
             output_generation = item.get("attributes.llm.output_messages")[0].get(
                 "message.content"
             )
