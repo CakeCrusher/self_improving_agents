@@ -172,7 +172,7 @@ class EvaluatorTracker:
         with open(file_path, "w") as f:
             json.dump(data.model_dump(), f, default=str, indent=2)
 
-    def get(self, evaluator_name: str) -> EvaluatorData:
+    def get(self, evaluator_name: str) -> Optional[EvaluatorData]:
         """Get tracked data for a specific evaluator.
 
         Args:
@@ -183,7 +183,6 @@ class EvaluatorTracker:
         """
         # Try to load from memory first
         if evaluator_name in self.tracked_data:
-            print("\n\nTYPEOF :", type(self.tracked_data[evaluator_name]))
             evaluator_data = self.tracked_data[evaluator_name]
 
         # If not in memory, try to load from disk
@@ -198,7 +197,7 @@ class EvaluatorTracker:
             except (json.JSONDecodeError, ValidationError):
                 raise ValueError(f"Failed to load evaluator data from {file_path}")
 
-        raise ValueError(f"No evaluator data found for {evaluator_name}")
+        return None
 
 
 def is_tracked_evaluator(evaluator: Callable) -> bool:

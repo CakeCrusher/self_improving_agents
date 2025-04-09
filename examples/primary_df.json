@@ -1,1 +1,176 @@
-[{"context.trace_id":"023a78e9c39d85bedfb721e96263ccc5","attributes.embedding.model_name":"","attributes.exception.type":"","attributes.llm.system":"openai","start_time":1744133540122,"attributes.llm.token_count.completion":46,"attributes.llm.provider":"openai","attributes.input.value":"{\"messages\": [{\"role\": \"system\", \"content\": \"You are a helpful AI assistant.\"}, {\"role\": \"user\", \"content\": \"What's the weather like today?\"}], \"model\": \"gpt-3.5-turbo\"}","attributes.llm.prompt_template.template":"","attributes.reranker.model_name":"","attributes.input.mime_type":"application\/json","attributes.llm.token_count.prompt_details.cache_read":0,"attributes.llm.token_count.prompt":25,"attributes.output.mime_type":"application\/json","name":"ChatCompletion","latency_ms":2139.734335,"status_code":"OK","attributes.llm.invocation_parameters":"{\"model\": \"gpt-3.5-turbo\"}","attributes.llm.prompt_template.variables":null,"attributes.reranker.query":"","attributes.llm.model_name":"gpt-3.5-turbo-0125","attributes.llm.prompt_template.version":"","attributes.exception.stacktrace":"","attributes.llm.input_messages":[{"message.role":"system","message.content":"You are a helpful AI assistant."},{"message.role":"user","message.content":"What's the weather like today?"}],"attributes.tool.name":"","attributes.output.value":"{\"id\":\"chatcmpl-BK765OCOcwJTNhWUyoiWB3nviKgnw\",\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"logprobs\":null,\"message\":{\"content\":\"I'm sorry, but I don't have real-time information on the current weather. You can check the weather on your device by using a weather app or website, or by asking a voice assistant like Siri or Google Assistant.\",\"refusal\":null,\"role\":\"assistant\",\"annotations\":[]}}],\"created\":1744133541,\"model\":\"gpt-3.5-turbo-0125\",\"object\":\"chat.completion\",\"service_tier\":\"default\",\"system_fingerprint\":null,\"usage\":{\"completion_tokens\":46,\"prompt_tokens\":25,\"total_tokens\":71,\"completion_tokens_details\":{\"accepted_prediction_tokens\":0,\"audio_tokens\":0,\"reasoning_tokens\":0,\"rejected_prediction_tokens\":0},\"prompt_tokens_details\":{\"audio_tokens\":0,\"cached_tokens\":0}}}","time":1744133540121,"attributes.tool.description":"","context.span_id":"c511d852f76c595e","end_time":1744133542262,"status_message":"","attributes.llm.output_messages":[{"message.role":"assistant","message.content":"I'm sorry, but I don't have real-time information on the current weather. You can check the weather on your device by using a weather app or website, or by asking a voice assistant like Siri or Google Assistant."}],"attributes.llm.token_count.total":71,"attributes.openinference.span.kind":"LLM","attributes.exception.message":""}]
+[
+    {
+        "status_code":"OK",
+        "attributes.input.value":"{\"messages\": [{\"role\": \"system\", \"content\": \"You are a helpful AI assistant.\"}, {\"role\": \"user\", \"content\": \"What's the weather like today?\"}], \"model\": \"gpt-3.5-turbo\"}",
+        "attributes.llm.invocation_parameters":"{\"model\": \"gpt-3.5-turbo\"}",
+        "attributes.reranker.model_name":"",
+        "attributes.reranker.query":"",
+        "attributes.llm.provider":"openai",
+        "eval.formatting.label":"good formatting",
+        "attributes.llm.model_name":"gpt-3.5-turbo-0125",
+        "context.trace_id":"19cf914d343911e00834287b247c6a6c",
+        "event.names":null,
+        "context.span_id":"f98308f60f403869",
+        "events":null,
+        "attributes.llm.input_messages":[
+            {
+                "message.role":"system",
+                "message.content":"You are a helpful AI assistant."
+            },
+            {
+                "message.role":"user",
+                "message.content":"What's the weather like today?"
+            }
+        ],
+        "attributes.llm.token_count.completion":48.0,
+        "attributes.exception.stacktrace":"",
+        "attributes.llm.prompt_template.template":"",
+        "end_time":1744133885115,
+        "status_message":"",
+        "time":1744133883840,
+        "event.timestamps":null,
+        "event.attributes":null,
+        "start_time":1744133883840,
+        "attributes.tool.description":"",
+        "eval.formatting.score":0.0,
+        "name":"ChatCompletion",
+        "eval.formatting.explanation":"The formatting of the text is clear and logical. It uses hierarchical headings to organize the content, starting with a main heading (# Tools), followed by a subheading (## functions), and then a namespace declaration (namespace functions). The use of comments to describe the purpose of the function and its parameters is also appropriate. The function type is clearly defined with a structured input, specifying the expected fields and their types. Overall, the formatting is consistent and easy to follow.",
+        "attributes.llm.token_count.total":73,
+        "attributes.llm.prompt_template.variables":null,
+        "attributes.openinference.span.kind":"LLM",
+        "attributes.llm.system":"openai",
+        "attributes.tool.name":"",
+        "attributes.output.mime_type":"application\/json",
+        "attributes.llm.token_count.prompt_details.cache_read":0.0,
+        "attributes.output.value":"{\"id\":\"chatcmpl-BK7Bc9M6NmUjBSXaWjEf6lkGANAJq\",\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"logprobs\":null,\"message\":{\"content\":\"I'm sorry, but I don't have access to real-time information such as the current weather. You can check the weather using a weather website or app, or ask a smart device like a smart speaker for the latest weather updates.\",\"refusal\":null,\"role\":\"assistant\",\"annotations\":[]}}],\"created\":1744133884,\"model\":\"gpt-3.5-turbo-0125\",\"object\":\"chat.completion\",\"service_tier\":\"default\",\"system_fingerprint\":null,\"usage\":{\"completion_tokens\":48,\"prompt_tokens\":25,\"total_tokens\":73,\"completion_tokens_details\":{\"accepted_prediction_tokens\":0,\"audio_tokens\":0,\"reasoning_tokens\":0,\"rejected_prediction_tokens\":0},\"prompt_tokens_details\":{\"audio_tokens\":0,\"cached_tokens\":0}}}",
+        "latency_ms":1275.340795,
+        "attributes.exception.message":"",
+        "attributes.llm.prompt_template.version":"",
+        "attributes.llm.token_count.prompt":25,
+        "attributes.embedding.model_name":"",
+        "attributes.exception.type":"",
+        "attributes.llm.output_messages":[
+            {
+                "message.role":"assistant",
+                "message.content":"I'm sorry, but I don't have access to real-time information such as the current weather. You can check the weather using a weather website or app, or ask a smart device like a smart speaker for the latest weather updates."
+            }
+        ],
+        "attributes.input.mime_type":"application\/json"
+    },
+    {
+        "status_code":"OK",
+        "attributes.input.value":"{\"messages\": [{\"role\": \"system\", \"content\": \"You are a helpful AI assistant.\"}, {\"role\": \"user\", \"content\": \"What's the weather like today?\"}], \"model\": \"gpt-3.5-turbo\"}",
+        "attributes.llm.invocation_parameters":"{\"model\": \"gpt-3.5-turbo\"}",
+        "attributes.reranker.model_name":"",
+        "attributes.reranker.query":"",
+        "attributes.llm.provider":"openai",
+        "eval.formatting.label":"good formatting",
+        "attributes.llm.model_name":"gpt-3.5-turbo-0125",
+        "context.trace_id":"955e67cf4b0a7ee9ccfaffb9d95ce72e",
+        "event.names":null,
+        "context.span_id":"9182b4fc51e3175a",
+        "events":null,
+        "attributes.llm.input_messages":[
+            {
+                "message.role":"system",
+                "message.content":"You are a helpful AI assistant."
+            },
+            {
+                "message.role":"user",
+                "message.content":"What's the weather like today?"
+            }
+        ],
+        "attributes.llm.token_count.completion":36.0,
+        "attributes.exception.stacktrace":"",
+        "attributes.llm.prompt_template.template":"",
+        "end_time":1744133922899,
+        "status_message":"",
+        "time":1744133921983,
+        "event.timestamps":null,
+        "event.attributes":null,
+        "start_time":1744133921983,
+        "attributes.tool.description":"",
+        "eval.formatting.score":0.0,
+        "name":"ChatCompletion",
+        "eval.formatting.explanation":"The formatting is clear and organized, with a hierarchical structure that makes it easy to understand the context and purpose of each section. The use of headings and subheadings (e.g., # Tools, ## functions) helps in distinguishing different parts of the document. The namespace 'functions' is clearly defined, and the type 'record_response' is well-structured with clear fields for 'explanation' and 'response'.",
+        "attributes.llm.token_count.total":61,
+        "attributes.llm.prompt_template.variables":null,
+        "attributes.openinference.span.kind":"LLM",
+        "attributes.llm.system":"openai",
+        "attributes.tool.name":"",
+        "attributes.output.mime_type":"application\/json",
+        "attributes.llm.token_count.prompt_details.cache_read":0.0,
+        "attributes.output.value":"{\"id\":\"chatcmpl-BK7CE1EVcdbBJcZcvSmV0feVIig7S\",\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"logprobs\":null,\"message\":{\"content\":\"I'm sorry, but I am unable to provide real-time weather updates. I recommend checking a weather website or app for the most current and accurate weather information for your location.\",\"refusal\":null,\"role\":\"assistant\",\"annotations\":[]}}],\"created\":1744133922,\"model\":\"gpt-3.5-turbo-0125\",\"object\":\"chat.completion\",\"service_tier\":\"default\",\"system_fingerprint\":null,\"usage\":{\"completion_tokens\":36,\"prompt_tokens\":25,\"total_tokens\":61,\"completion_tokens_details\":{\"accepted_prediction_tokens\":0,\"audio_tokens\":0,\"reasoning_tokens\":0,\"rejected_prediction_tokens\":0},\"prompt_tokens_details\":{\"audio_tokens\":0,\"cached_tokens\":0}}}",
+        "latency_ms":916.015821,
+        "attributes.exception.message":"",
+        "attributes.llm.prompt_template.version":"",
+        "attributes.llm.token_count.prompt":25,
+        "attributes.embedding.model_name":"",
+        "attributes.exception.type":"",
+        "attributes.llm.output_messages":[
+            {
+                "message.role":"assistant",
+                "message.content":"I'm sorry, but I am unable to provide real-time weather updates. I recommend checking a weather website or app for the most current and accurate weather information for your location."
+            }
+        ],
+        "attributes.input.mime_type":"application\/json"
+    },
+    {
+        "status_code":"OK",
+        "attributes.input.value":"{\"messages\": [{\"role\": \"system\", \"content\": \"You are a helpful AI assistant.\"}, {\"role\": \"user\", \"content\": \"What's the weather like today?\"}], \"model\": \"gpt-3.5-turbo\"}",
+        "attributes.llm.invocation_parameters":"{\"model\": \"gpt-3.5-turbo\"}",
+        "attributes.reranker.model_name":"",
+        "attributes.reranker.query":"",
+        "attributes.llm.provider":"openai",
+        "eval.formatting.label":"good formatting",
+        "attributes.llm.model_name":"gpt-3.5-turbo-0125",
+        "context.trace_id":"b786bca06a5cb1a287fcca4e2b89c6dc",
+        "event.names":null,
+        "context.span_id":"d81f0f8e4cd212d7",
+        "events":null,
+        "attributes.llm.input_messages":[
+            {
+                "message.role":"system",
+                "message.content":"You are a helpful AI assistant."
+            },
+            {
+                "message.role":"user",
+                "message.content":"What's the weather like today?"
+            }
+        ],
+        "attributes.llm.token_count.completion":43.0,
+        "attributes.exception.stacktrace":"",
+        "attributes.llm.prompt_template.template":"",
+        "end_time":1744133994477,
+        "status_message":"",
+        "time":1744133992956,
+        "event.timestamps":null,
+        "event.attributes":null,
+        "start_time":1744133992956,
+        "attributes.tool.description":"",
+        "eval.formatting.score":0.0,
+        "name":"ChatCompletion",
+        "eval.formatting.explanation":"The formatting of the text is clear and well-structured. It uses headings and subheadings to organize the content, making it easy to understand the hierarchy and purpose of each section. The use of namespaces and types is appropriate for defining the structure of the functions, and the comments provide additional context.",
+        "attributes.llm.token_count.total":68,
+        "attributes.llm.prompt_template.variables":null,
+        "attributes.openinference.span.kind":"LLM",
+        "attributes.llm.system":"openai",
+        "attributes.tool.name":"",
+        "attributes.output.mime_type":"application\/json",
+        "attributes.llm.token_count.prompt_details.cache_read":0.0,
+        "attributes.output.value":"{\"id\":\"chatcmpl-BK7DNfA5M3du85J1IIq56WJ8GbOhJ\",\"choices\":[{\"finish_reason\":\"stop\",\"index\":0,\"logprobs\":null,\"message\":{\"content\":\"I'm sorry, but I don't have access to real-time information such as the current weather. You can check the weather on your phone or by visiting a weather website for the most up-to-date information.\",\"refusal\":null,\"role\":\"assistant\",\"annotations\":[]}}],\"created\":1744133993,\"model\":\"gpt-3.5-turbo-0125\",\"object\":\"chat.completion\",\"service_tier\":\"default\",\"system_fingerprint\":null,\"usage\":{\"completion_tokens\":43,\"prompt_tokens\":25,\"total_tokens\":68,\"completion_tokens_details\":{\"accepted_prediction_tokens\":0,\"audio_tokens\":0,\"reasoning_tokens\":0,\"rejected_prediction_tokens\":0},\"prompt_tokens_details\":{\"audio_tokens\":0,\"cached_tokens\":0}}}",
+        "latency_ms":1520.304596,
+        "attributes.exception.message":"",
+        "attributes.llm.prompt_template.version":"",
+        "attributes.llm.token_count.prompt":25,
+        "attributes.embedding.model_name":"",
+        "attributes.exception.type":"",
+        "attributes.llm.output_messages":[
+            {
+                "message.role":"assistant",
+                "message.content":"I'm sorry, but I don't have access to real-time information such as the current weather. You can check the weather on your phone or by visiting a weather website for the most up-to-date information."
+            }
+        ],
+        "attributes.input.mime_type":"application\/json"
+    }
+]

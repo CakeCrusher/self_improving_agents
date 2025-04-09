@@ -2,9 +2,8 @@
 """Runner for collecting and processing state-action data."""
 import json
 from datetime import datetime
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
 
-from ..evaluator_handler.models import EvaluatorData
 from ..evaluator_handler.tracker import EvaluatorTracker
 from ..models.state_action import (
     Actions,
@@ -61,18 +60,16 @@ class DataCollectionRunner:
 
         telemetry_json = json.loads(telemetry_df.to_json(orient="records"))
 
+        if not telemetry_json:
+            raise ValueError("No telemetry data found")
+
         # Get evaluator data
         # TODO: extend this to names (PLURAL)
-        evaluators_data: List[EvaluatorData] = []
-        if not evaluator_names:
-            raise ValueError("No evaluator names provided")
-        for name in evaluator_names:
-            evaluator_data = self.evaluator_tracker.get(name)
-            if not evaluator_data.calls:
-                raise ValueError(f"No calls found for evaluator {name}")
-            evaluators_data.append(evaluator_data)
-
-        # Collect constants
+        evaluator_constants: List[EvalConstant] = self.discover_evaluators(
+            evaluator_names=evaluator_names,
+            telemetry_json=telemetry_json,
+        )
+        print("EVALUATOR CONSTANTS: ", evaluator_constants)
 
         # Build actions
         system_prompt = ""
@@ -93,25 +90,6 @@ class DataCollectionRunner:
         model = telemetry_df.iloc[0].get("attributes.llm.model_name")
         actions = Actions(system_prompt=system_prompt, model=model)
 
-        # Build eval_constants
-        eval_constants = []
-        for evaluator_data in evaluators_data:
-            eval_template = evaluator_data.calls[0].template
-            eval_rails = evaluator_data.calls[0].rails
-            if not eval_template:
-                raise ValueError(
-                    f"No template found for evaluator {evaluator_data.name}"
-                )
-            if not eval_rails:
-                raise ValueError(f"No rails found for evaluator {evaluator_data.name}")
-            eval_constants.append(
-                EvalConstant(
-                    name=evaluator_data.name,
-                    eval_template=eval_template,
-                    eval_rails=eval_rails,
-                )
-            )
-
         # Collect samples
         samples = []
         for item in telemetry_json:
@@ -123,20 +101,20 @@ class DataCollectionRunner:
                 "message.content"
             )
             evals_metrics = []
-            for evaluator_data in evaluators_data:
+            for evaluator_data in evaluator_constants:
                 eval_name = evaluator_data.name
                 # # TODO: restore string templating with eval_name
                 # eval_score = item.get(f'eval.{eval_name}.label')
                 # eval_explanation = item.get(f'eval.{eval_name}.explanation')
-                eval_score = item.get("eval.formatting_consistency_out_of_5.label")
-                eval_explanation = item.get(
-                    "eval.formatting_consistency_out_of_5.explanation"
-                )
+                eval_score = item.get(f"eval.{eval_name}.score")
+                eval_explanation = item.get(f"eval.{eval_name}.explanation")
+                eval_label = item.get(f"eval.{eval_name}.label")
                 evals_metrics.append(
                     EvalMetrics(
                         name=eval_name,
                         eval_score=eval_score,
                         eval_reasoning=eval_explanation,
+                        eval_label=eval_label,
                     )
                 )
 
@@ -149,7 +127,53 @@ class DataCollectionRunner:
             )
 
         state_action_pair = StateActions(
-            samples=samples, actions=actions, eval_constants=eval_constants
+            samples=samples, actions=actions, eval_constants=evaluator_constants
         )
 
         return state_action_pair
+
+    def discover_evaluators(
+        self,
+        evaluator_names: Optional[List[str]] = None,
+        telemetry_json: Optional[List[Dict[str, Any]]] = None,
+    ) -> List[EvalConstant]:
+        """Discover evaluator data from both tracker and telemetry sources.
+
+        Args:
+            evaluator_names: Optional list of evaluator names to search for in tracker
+            telemetry_json: Optional telemetry data to search through
+
+        Returns:
+            List of EvalConstant objects containing discovered evaluator data
+        """
+        evaluators_data: List[EvalConstant] = []
+
+        if not telemetry_json:
+            raise ValueError("No telemetry data found")
+
+        if evaluator_names:
+            for name in evaluator_names:
+                try:
+                    # Step 1: Search through tracker data if names provided
+                    evaluator_data = self.evaluator_tracker.get(name)
+                    if evaluator_data and evaluator_data.calls:
+                        evaluators_data.append(
+                            EvalConstant(
+                                name=name,
+                                eval_template=evaluator_data.calls[0].template,
+                                eval_rails=evaluator_data.calls[0].rails,
+                            )
+                        )
+                        continue
+
+                    # Step 2: Search through telemetry data if available
+                    for key, val in telemetry_json[0].items():
+                        if key.startswith(f"eval.{name}."):
+                            evaluators_data.append(EvalConstant(name=name))
+                            break
+
+                except ValueError:
+                    # Continue if evaluator not found in tracker
+                    continue
+
+        return evaluators_data

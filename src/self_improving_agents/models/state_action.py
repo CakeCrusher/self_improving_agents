@@ -1,7 +1,7 @@
 # src/self_improving_agents/models/state_action.py
 """State-action pair models for policy learning."""
 from datetime import datetime
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel, Field
 
@@ -10,8 +10,9 @@ class EvalMetrics(BaseModel):
     """Evaluation metrics from a single evaluation."""
 
     name: str
-    eval_score: Any
-    eval_reasoning: str
+    eval_score: Optional[float] = None
+    eval_reasoning: Optional[str] = None
+    eval_label: Optional[str] = None
 
 
 class Sample(BaseModel):
@@ -39,8 +40,8 @@ class EvalConstant(BaseModel):
     """Constants used for evaluation."""
 
     name: str
-    eval_template: str
-    eval_rails: List[Any]
+    eval_template: Optional[str] = None
+    eval_rails: Optional[List[Any]] = None
 
 
 class StateActions(BaseModel):
