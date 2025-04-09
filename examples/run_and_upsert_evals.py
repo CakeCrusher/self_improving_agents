@@ -2,9 +2,9 @@ import os
 from datetime import datetime, timedelta
 
 from arize.exporter import ArizeExportClient
-from arize.pandas.logger import Client
 from arize.utils.types import Environments
 from dotenv import load_dotenv
+from openai import Client
 from phoenix.evals import OpenAIModel, llm_classify
 
 from self_improving_agents.evaluator_handler.tracker import EvaluatorTracker
