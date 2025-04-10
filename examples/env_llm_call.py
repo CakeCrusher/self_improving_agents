@@ -44,6 +44,7 @@ logger.info(f"Collected {len(state_actions.samples)} samples with updated action
 # Emulate LLM calls using the collected state_actions
 # if state_actions.samples:
 logger.info("Emulating LLM calls with collected state actions")
+print(state_actions)
 response = env.emulate_llm_call(
     state_actions=state_actions,
     run_id=f"example_run_{datetime.now().strftime('%Y%m%d%H%M%S')}",

@@ -32,7 +32,9 @@ class EnvironmentSnapshot:
         # Create the snapshots directory if it doesn't exist
         os.makedirs(self.snapshot_dir, exist_ok=True)
 
-    def start(self, metadata: Optional[Dict[str, Any]] = None) -> None:
+    def start(
+        self, metadata: Optional[Dict[str, Any]] = None, save: bool = False
+    ) -> None:
         """Start the snapshot tracking.
 
         Args:
@@ -43,9 +45,10 @@ class EnvironmentSnapshot:
             self.metadata.update(metadata)
 
         # Save initial snapshot
-        self._save_snapshot()
+        if save:
+            self._save_snapshot()
 
-    def end(self, metadata: Optional[Dict[str, Any]] = None) -> None:
+    def end(self, metadata: Optional[Dict[str, Any]] = None, save: bool = True) -> None:
         """End the snapshot tracking.
 
         Args:

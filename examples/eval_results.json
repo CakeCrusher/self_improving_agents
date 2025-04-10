@@ -1,0 +1,38 @@
+{
+    "results": [
+        {
+            "label": "4",
+            "explanation": "The formatting of the rewritten version maintains a similar structure to the original, including the use of headings, subheadings, lists, and quotes. However, there are slight variations in the labeling of sections (e.g., 'A.' instead of '1.' for the first section) and the overall phrasing of the content. Despite these differences, the core formatting elements remain consistent, leading to a score of 4 for overall similarity in formatting.",
+            "exceptions": [],
+            "execution_status": "COMPLETED",
+            "execution_seconds": 2.72998309135437,
+            "context.span_id": "ef33985dc7cff2ae",
+            "eval.formatting_classify.label": "4",
+            "eval.formatting_classify.explanation": "The formatting of the rewritten version maintains a similar structure to the original, including the use of headings, subheadings, lists, and quotes. However, there are slight variations in the labeling of sections (e.g., 'A.' instead of '1.' for the first section) and the overall phrasing of the content. Despite these differences, the core formatting elements remain consistent, leading to a score of 4 for overall similarity in formatting."
+        },
+        {
+            "label": "4",
+            "explanation": "The formatting of the rewritten version maintains a clear structure with headings and subheadings, similar to the original. However, the headings are not formatted in the same way (e.g., the original uses plain text while the rewritten version uses bold). The overall organization is consistent, but the differences in heading styles and the lack of a clear separation between sections (like paragraphs) slightly detract from the consistency. Therefore, I would rate it a 4 for being mostly consistent but with notable differences in formatting style.",
+            "exceptions": [],
+            "execution_status": "COMPLETED",
+            "execution_seconds": 2.7663562297821045,
+            "context.span_id": "1c478a78153f04cb",
+            "eval.formatting_classify.label": "4",
+            "eval.formatting_classify.explanation": "The formatting of the rewritten version maintains a clear structure with headings and subheadings, similar to the original. However, the headings are not formatted in the same way (e.g., the original uses plain text while the rewritten version uses bold). The overall organization is consistent, but the differences in heading styles and the lack of a clear separation between sections (like paragraphs) slightly detract from the consistency. Therefore, I would rate it a 4 for being mostly consistent but with notable differences in formatting style."
+        },
+        {
+            "label": "2",
+            "explanation": "The formatting in the rewritten version differs significantly from the original. The original uses a structured format with clear headings, subheadings, and lists, while the rewritten version employs a more narrative style with bold headings but lacks the same organizational structure. The use of bullet points and clear sections is absent, leading to a less consistent format compared to the original.",
+            "exceptions": [],
+            "execution_status": "COMPLETED",
+            "execution_seconds": 2.4278335571289062,
+            "context.span_id": "a9293eafac46ad09",
+            "eval.formatting_classify.label": "2",
+            "eval.formatting_classify.explanation": "The formatting in the rewritten version differs significantly from the original. The original uses a structured format with clear headings, subheadings, and lists, while the rewritten version employs a more narrative style with bold headings but lacks the same organizational structure. The use of bullet points and clear sections is absent, leading to a less consistent format compared to the original."
+        }
+    ],
+    "evaluator_name": "formatting_classify",
+    "run_id": "example_eval",
+    "duration": 4.055984,
+    "row_count": 3
+}

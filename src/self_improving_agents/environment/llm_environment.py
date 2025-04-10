@@ -7,13 +7,16 @@ import json
 import logging
 import os
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional
 
 from arize.otel import register
+from arize.utils.types import Environments
 from openai import OpenAI
 from openai.types.chat import ChatCompletion
 from openinference.instrumentation.openai import OpenAIInstrumentor
+from phoenix.evals import OpenAIModel
 
+from ..evaluator_handler.eval_pipeline import EvalPipeline
 from ..evaluator_handler.evaluator_saver import EvaluatorSaver
 from ..models.state_action import StateActions
 from ..policy import LLMPolicyUpdater
@@ -29,7 +32,6 @@ class LLMEnvironment:
 
     def __init__(
         self,
-        project_name: str = "sia",
         arize_space_id: Optional[str] = None,
         arize_api_key: Optional[str] = None,
         arize_model_id: Optional[str] = None,
@@ -39,7 +41,6 @@ class LLMEnvironment:
         """Initialize the LLM environment.
 
         Args:
-            project_name: Name of the project for Arize tracking
             arize_space_id: Arize space ID (defaults to ARIZE_SPACE_ID env var)
             arize_api_key: Arize API key (defaults to ARIZE_API_KEY env var)
             arize_model_id: Arize model ID (defaults to ARIZE_MODEL_ID env var)
@@ -47,12 +48,9 @@ class LLMEnvironment:
             checkpoint_dir: Directory for action checkpoints
         """
         # Set up environment variables
-        self.project_name = project_name
         self.arize_space_id = arize_space_id or os.getenv("ARIZE_SPACE_ID")
         self.arize_api_key = arize_api_key or os.getenv("ARIZE_API_KEY")
-        self.arize_model_id = (
-            arize_model_id or os.getenv("ARIZE_MODEL_ID") or project_name
-        )
+        self.arize_model_id = arize_model_id or os.getenv("ARIZE_MODEL_ID")
         self.openai_api_key = openai_api_key or os.getenv("OPENAI_API_KEY")
         self.checkpoint_dir = checkpoint_dir
 
@@ -75,16 +73,23 @@ class LLMEnvironment:
         self.openai_client = OpenAI(api_key=self.openai_api_key)
 
         # Initialize other components
-        evaluator_saver = EvaluatorSaver()
-        arize_connector = ArizeConnector(
+        self.evaluator_saver = EvaluatorSaver()
+        self.arize_connector = ArizeConnector(
             space_id=self.arize_space_id,
             model_id=self.arize_model_id,
+            api_key=self.arize_api_key,
+        )
+
+        # Initialize eval pipeline
+        self.eval_pipeline = EvalPipeline(
+            evaluator_saver=self.evaluator_saver,
+            arize_connector=self.arize_connector,
         )
 
         self.policy = LLMPolicyUpdater()  # for retrieving checkpoint
         self.data_collector = DataCollectionRunner(
-            evaluator_saver=evaluator_saver,
-            arize_connector=arize_connector,
+            evaluator_saver=self.evaluator_saver,
+            arize_connector=self.arize_connector,
         )  # for collecting data
 
         # Create checkpoint directory
@@ -94,13 +99,13 @@ class LLMEnvironment:
         """Initialize Arize platform tracing."""
         if self.arize_space_id and self.arize_api_key:
             logger.info(
-                f"Registering Arize tracer provider for project '{self.project_name}'"
+                f"Registering Arize tracer provider for project '{self.arize_model_id}'"
             )
             # Set up OTel via Arize convenience function
             tracer_provider = register(
                 space_id=self.arize_space_id,
                 api_key=self.arize_api_key,
-                project_name=self.project_name,
+                project_name=self.arize_model_id,
             )
 
             # Set up OpenAI instrumentation
@@ -239,4 +244,89 @@ class LLMEnvironment:
             "model": model,
             "run_id": snapshot.run_id,
             "duration": snapshot.get_duration(),
+        }
+
+    def emulate_eval(
+        self,
+        state_actions: StateActions,
+        evaluator: Callable,
+        model: OpenAIModel,
+        evaluator_name: str,
+        start_time: datetime,
+        end_time: datetime = datetime.now(),
+        run_id: Optional[str] = None,
+        upsert: bool = False,
+    ) -> Dict[str, Any]:
+        """Emulate an evaluation using the specified evaluator and snapshot data.
+
+        Args:
+            state_actions: StateActions containing evaluation configuration
+            evaluator: The evaluation function to run
+            evaluator_name: Name of the evaluator
+            snapshot_window: Number of days to look back for snapshot data (default: 1)
+            run_id: Optional run ID for tracking
+            upsert: Whether to upload results to Arize
+
+        Returns:
+            Dict containing evaluation results and metadata
+        """
+        # Create a snapshot for tracking
+        snapshot = EnvironmentSnapshot(run_id=run_id)
+
+        eval_config = self.evaluator_saver.load_evaluator(evaluator_name)
+        if not eval_config:
+            raise ValueError(f"Evaluator '{evaluator_name}' not found")
+
+        # Start tracking
+        snapshot.start(
+            {
+                "evaluator_name": evaluator_name,
+                "state_actions_samples": len(state_actions.samples),
+            }
+        )
+
+        # Extract evaluator configuration from state_actions
+        # This assumes state_actions.actions contains the evaluation configuration
+
+        # Prepare telemetry kwargs
+        get_telemetry_kwargs = {
+            **eval_config.get_telemetry_kwargs,
+            "model_id": self.arize_model_id,
+            "space_id": self.arize_space_id,
+            "environment": Environments.TRACING,
+            "start_time": start_time,
+            "end_time": end_time,
+        }
+
+        eval_kwargs = {
+            **eval_config.eval_kwargs,
+            "model": model,
+        }
+
+        # Run the evaluation pipeline
+        logger.info(f"Running evaluation pipeline with evaluator '{evaluator_name}'")
+        results = self.eval_pipeline.run_pipeline(
+            evaluator=evaluator,
+            evaluator_name=evaluator_name,
+            evaluator_kwargs=eval_kwargs,
+            get_telemetry_kwargs=get_telemetry_kwargs,
+            upsert=upsert,
+        )
+
+        # End tracking with result metadata
+        snapshot.end(
+            {
+                "results_rows": len(results),
+                "evaluator_name": evaluator_name,
+                "success": True,
+            }
+        )
+
+        # Return the evaluation results and metadata
+        return {
+            "results": results.to_dict(orient="records"),
+            "evaluator_name": evaluator_name,
+            "run_id": snapshot.run_id,
+            "duration": snapshot.get_duration(),
+            "row_count": len(results),
         }

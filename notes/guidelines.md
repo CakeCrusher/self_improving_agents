@@ -65,6 +65,7 @@ It necessarily needs to be offline because it depends on visibility of evals, si
 - Explore nested spans
 - Exploration ~= Temperature
 - Currentely dependent on chat completions llm calls and llm_categorize eval
+- address potential security problems with leaking env vars in .sia
 
 ## Research
 - Offline inverse RL = learn the eval

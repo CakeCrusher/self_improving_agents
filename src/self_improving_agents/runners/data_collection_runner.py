@@ -70,7 +70,6 @@ class DataCollectionRunner:
             evaluator_names=evaluator_names,
             telemetry_json=telemetry_json,
         )
-        print("EVALUATOR CONSTANTS: ", evaluator_constants)
 
         # Build actions
         system_prompt = ""
