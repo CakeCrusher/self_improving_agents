@@ -4,7 +4,8 @@ import json
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-from ..evaluator_handler.tracker import EvaluatorTracker
+from self_improving_agents.evaluator_handler.evaluator_saver import EvaluatorSaver
+
 from ..models.state_action import (
     Actions,
     EvalConstant,
@@ -20,18 +21,18 @@ class DataCollectionRunner:
 
     def __init__(
         self,
-        evaluator_tracker: EvaluatorTracker,
+        evaluator_saver: EvaluatorSaver,
         arize_connector: Optional[ArizeConnector] = None,
         save_dir: Optional[str] = None,
     ):
         """Initialize the data collection runner.
 
         Args:
-            evaluator_tracker: Tracker for evaluator data
+            evaluator_saver: Saver for evaluator data
             arize_connector: Connector for Arize telemetry
             save_dir: Directory to save state-action pairs
         """
-        self.evaluator_tracker = evaluator_tracker
+        self.evaluator_saver = evaluator_saver
         self.arize_connector = arize_connector or ArizeConnector()
         self.save_dir = save_dir
 
@@ -137,10 +138,10 @@ class DataCollectionRunner:
         evaluator_names: Optional[List[str]] = None,
         telemetry_json: Optional[List[Dict[str, Any]]] = None,
     ) -> List[EvalConstant]:
-        """Discover evaluator data from both tracker and telemetry sources.
+        """Discover evaluator data from telemetry data.
 
         Args:
-            evaluator_names: Optional list of evaluator names to search for in tracker
+            evaluator_names: Optional list of evaluator names to search for in telemetry data
             telemetry_json: Optional telemetry data to search through
 
         Returns:
@@ -154,14 +155,16 @@ class DataCollectionRunner:
         if evaluator_names:
             for name in evaluator_names:
                 try:
-                    # Step 1: Search through tracker data if names provided
-                    evaluator_data = self.evaluator_tracker.get(name)
-                    if evaluator_data and evaluator_data.calls:
+                    # Step 1: Search through evaluator data if names provided
+                    evaluator_data = self.evaluator_saver.load_evaluator(name)
+                    if evaluator_data:
                         evaluators_data.append(
                             EvalConstant(
                                 name=name,
-                                eval_template=evaluator_data.calls[0].template,
-                                eval_rails=evaluator_data.calls[0].rails,
+                                eval_template=evaluator_data.eval_kwargs.get(
+                                    "template"
+                                ),
+                                eval_rails=evaluator_data.eval_kwargs.get("rails"),
                             )
                         )
                         continue

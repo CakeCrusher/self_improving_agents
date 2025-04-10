@@ -14,7 +14,7 @@ from openai import OpenAI
 from openai.types.chat import ChatCompletion
 from openinference.instrumentation.openai import OpenAIInstrumentor
 
-from ..evaluator_handler.tracker import EvaluatorTracker
+from ..evaluator_handler.evaluator_saver import EvaluatorSaver
 from ..models.state_action import StateActions
 from ..policy import LLMPolicyUpdater
 from ..runners.arize_connector import ArizeConnector
@@ -75,7 +75,7 @@ class LLMEnvironment:
         self.openai_client = OpenAI(api_key=self.openai_api_key)
 
         # Initialize other components
-        evaluator_tracker = EvaluatorTracker()
+        evaluator_saver = EvaluatorSaver()
         arize_connector = ArizeConnector(
             space_id=self.arize_space_id,
             model_id=self.arize_model_id,
@@ -83,7 +83,7 @@ class LLMEnvironment:
 
         self.policy = LLMPolicyUpdater()  # for retrieving checkpoint
         self.data_collector = DataCollectionRunner(
-            evaluator_tracker=evaluator_tracker,
+            evaluator_saver=evaluator_saver,
             arize_connector=arize_connector,
         )  # for collecting data
 

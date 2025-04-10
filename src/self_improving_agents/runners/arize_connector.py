@@ -100,9 +100,12 @@ class ArizeConnector:
         evals_df["context.span_id"] = primary_df["context.span_id"]
 
         # Format the column names as expected by Arize
-        evals_df[f"eval.{eval_name}.label"] = evals_df["label"]
-        evals_df[f"eval.{eval_name}.explanation"] = evals_df["explanation"]
-        evals_df[f"eval.{eval_name}.score"] = evals_df["score"]
+        if "label" in evals_df.columns:
+            evals_df[f"eval.{eval_name}.label"] = evals_df["label"]
+        if "explanation" in evals_df.columns:
+            evals_df[f"eval.{eval_name}.explanation"] = evals_df["explanation"]
+        if "score" in evals_df.columns:
+            evals_df[f"eval.{eval_name}.score"] = evals_df["score"]
 
         # Upload the evaluations
         logging_client.log_evaluations_sync(evals_df, self.ARIZE_MODEL_ID)

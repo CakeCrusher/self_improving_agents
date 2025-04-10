@@ -1,0 +1,50 @@
+[
+    {
+        "label":"4",
+        "explanation":"The formatting of the rewritten version maintains a similar structure to the original, including the use of headings, subheadings, and block quotes. However, there are slight variations in wording and phrasing of the sections, which may affect the overall consistency. The headings are consistent in style, and the overall organization is preserved, leading to a score of 4 for formatting consistency.",
+        "exceptions":[
+
+        ],
+        "execution_status":"COMPLETED",
+        "execution_seconds":1.9428920746,
+        "context.span_id":"7c67aaaacb9560eb",
+        "eval.formatting_classify.label":"4",
+        "eval.formatting_classify.explanation":"The formatting of the rewritten version maintains a similar structure to the original, including the use of headings, subheadings, and block quotes. However, there are slight variations in wording and phrasing of the sections, which may affect the overall consistency. The headings are consistent in style, and the overall organization is preserved, leading to a score of 4 for formatting consistency."
+    },
+    {
+        "label":"1",
+        "explanation":"The formatting of the rewritten version is significantly different from the original. The original text uses a standard paragraph format with clear sections and transitions, while the rewritten version employs bold headings and a more structured layout with distinct sections. This change in formatting style, including the use of bold for section titles and the overall presentation, indicates a complete departure from the original format. Therefore, the consistency score is low.",
+        "exceptions":[
+
+        ],
+        "execution_status":"COMPLETED",
+        "execution_seconds":1.9426367283,
+        "context.span_id":"fc971d2014a2064d",
+        "eval.formatting_classify.label":"1",
+        "eval.formatting_classify.explanation":"The formatting of the rewritten version is significantly different from the original. The original text uses a standard paragraph format with clear sections and transitions, while the rewritten version employs bold headings and a more structured layout with distinct sections. This change in formatting style, including the use of bold for section titles and the overall presentation, indicates a complete departure from the original format. Therefore, the consistency score is low."
+    },
+    {
+        "label":"1",
+        "explanation":"The formatting of the rewritten version is significantly different from the original. The original text uses a straightforward narrative structure with paragraphs, while the rewritten version employs headings and subheadings, creating a more segmented and visually distinct format. Additionally, the use of bullet points or lists is absent in the rewritten version, further contributing to the difference in formatting style. Therefore, the score reflects a lack of consistency in formatting between the two versions.",
+        "exceptions":[
+
+        ],
+        "execution_status":"COMPLETED",
+        "execution_seconds":1.9415855408,
+        "context.span_id":"d6ba6bdc99d489a0",
+        "eval.formatting_classify.label":"1",
+        "eval.formatting_classify.explanation":"The formatting of the rewritten version is significantly different from the original. The original text uses a straightforward narrative structure with paragraphs, while the rewritten version employs headings and subheadings, creating a more segmented and visually distinct format. Additionally, the use of bullet points or lists is absent in the rewritten version, further contributing to the difference in formatting style. Therefore, the score reflects a lack of consistency in formatting between the two versions."
+    },
+    {
+        "label":"1",
+        "explanation":"The formatting of the rewritten version is significantly different from the original. The original text is structured in paragraphs without headings, while the rewritten version uses multiple headings and subheadings, creating a distinct layout. Additionally, the use of bullet points and the overall organization of ideas differ greatly, leading to a lack of consistency in formatting. Therefore, the score is 1, indicating a complete departure from the original formatting style.",
+        "exceptions":[
+
+        ],
+        "execution_status":"COMPLETED",
+        "execution_seconds":1.9417300224,
+        "context.span_id":"e78ddf55cddcfd3e",
+        "eval.formatting_classify.label":"1",
+        "eval.formatting_classify.explanation":"The formatting of the rewritten version is significantly different from the original. The original text is structured in paragraphs without headings, while the rewritten version uses multiple headings and subheadings, creating a distinct layout. Additionally, the use of bullet points and the overall organization of ideas differ greatly, leading to a lack of consistency in formatting. Therefore, the score is 1, indicating a complete departure from the original formatting style."
+    }
+]

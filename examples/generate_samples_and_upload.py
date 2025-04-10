@@ -50,7 +50,7 @@ client = OpenAI()
 
 print("\n\nSTARTING GENERATE SAMPLES")
 
-limit = 100
+limit = 3
 for idx, input in enumerate(inputs[:limit]):
     response = client.chat.completions.create(
         model="gpt-4o-mini",

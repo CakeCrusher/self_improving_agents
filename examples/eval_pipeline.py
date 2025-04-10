@@ -1,11 +1,13 @@
 import os
 from datetime import datetime, timedelta
 
-from arize.exporter import ArizeExportClient
-from arize.pandas.logger import Client
 from arize.utils.types import Environments
 from dotenv import load_dotenv
 from phoenix.evals import OpenAIModel, llm_classify
+
+from self_improving_agents.evaluator_handler.eval_pipeline import EvalPipeline
+from self_improving_agents.evaluator_handler.evaluator_saver import EvaluatorSaver
+from self_improving_agents.runners.arize_connector import ArizeConnector
 
 load_dotenv()
 print("\n\nSTARTING EVALUATION RUN")
@@ -13,34 +15,8 @@ print("\n\nSTARTING EVALUATION RUN")
 ARIZE_DEVELOPER_KEY = os.getenv("ARIZE_DEVELOPER_KEY")
 ARIZE_SPACE_ID = os.getenv("ARIZE_SPACE_ID")
 ARIZE_MODEL_ID = os.getenv("ARIZE_MODEL_ID")
-
-now = datetime.now()
-
-
-# Exporting your dataset into a dataframe
-client = ArizeExportClient(api_key=ARIZE_DEVELOPER_KEY)
-primary_df = client.export_model_to_df(
-    model_id=ARIZE_MODEL_ID,
-    space_id=ARIZE_SPACE_ID,
-    environment=Environments.TRACING,
-    start_time=now - timedelta(days=2),
-    end_time=now,
-)
-# save primary_df to json
-primary_df.to_json("primary_df.json", orient="records")
-
-print(primary_df)
-
-# Run evals
-
-
+ARIZE_API_KEY = os.getenv("ARIZE_API_KEY")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-
-model = OpenAIModel(
-    model="gpt-4o-mini",
-    temperature=0.0,
-    api_key=OPENAI_API_KEY,
-)
 
 # load texts from original.md scale1.md scale3.md scale5.md
 with open("original.md", "r") as f:
@@ -134,47 +110,49 @@ Provide a formatting consistency score (1-5) for the new rewritten version.
 """
 )
 
-
-primary_df = primary_df.head(5)
-
-# TESTING
-primary_df = primary_df.head(5)
-
-eval_name = "formatting_consistency_out_of_5"
-
-evals_df = llm_classify(
-    dataframe=primary_df,
-    model=model,
-    template=EVAL_TEMPLATE,
-    rails=["1", "2", "3", "4", "5"],
-    provide_explanation=True,
-)
-
-print(evals_df)
-
-# Create evaluation data for Arize upsert
-print("\n\nSTARTING UPSERT EVALS TO ARIZE")
-
-# OpenInference attributes
-evals_df["context.span_id"] = primary_df["context.span_id"]
-if "score" in evals_df.columns:
-    evals_df[f"eval.{eval_name}.score"] = evals_df["score"]
-if "label" in evals_df.columns:
-    evals_df[f"eval.{eval_name}.label"] = evals_df["label"]
-if "explanation" in evals_df.columns:
-    evals_df[f"eval.{eval_name}.explanation"] = evals_df["explanation"]
-
-
-ARIZE_API_KEY = os.getenv("ARIZE_API_KEY")
-ARIZE_MODEL_ID = os.getenv("ARIZE_MODEL_ID")
-
-client = Client(
-    space_id=ARIZE_SPACE_ID,
+evaluator_saver = EvaluatorSaver()
+arize_connector = ArizeConnector(
     developer_key=ARIZE_DEVELOPER_KEY,
+    space_id=ARIZE_SPACE_ID,
+    model_id=ARIZE_MODEL_ID,
     api_key=ARIZE_API_KEY,
 )
 
-# save evals_df to jsonCompletions Inputs
-evals_df.to_json("evals_df.json", orient="records")
+# Initialize pipeline
+pipeline = EvalPipeline(
+    evaluator_saver=evaluator_saver, arize_connector=arize_connector
+)
 
-client.log_evaluations_sync(evals_df, ARIZE_MODEL_ID)
+model = OpenAIModel(
+    model="gpt-4o-mini",
+    temperature=0.0,
+    api_key=OPENAI_API_KEY,
+)
+
+start_date = datetime.now() - timedelta(days=2)
+end_date = datetime.now()
+
+# Run evaluation
+results = pipeline.run_pipeline(
+    evaluator=llm_classify,
+    evaluator_name="formatting_classify",
+    evaluator_kwargs={
+        "model": model,
+        "template": EVAL_TEMPLATE,
+        "rails": ["1", "2", "3", "4", "5"],
+        "provide_explanation": True,
+    },
+    get_telemetry_kwargs={
+        "model_id": ARIZE_MODEL_ID,
+        "space_id": ARIZE_SPACE_ID,
+        "environment": Environments.TRACING,
+        "start_time": start_date,
+        "end_time": end_date,
+    },
+    upsert=True,
+)
+
+print(f"Completed evaluation run with {results.shape[0]} rows")
+
+# save results to json file
+results.to_json("results.json", orient="records", indent=4)

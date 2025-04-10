@@ -10,7 +10,7 @@ print("\n\nSTARTING EVALUATION RUN")
 
 ARIZE_DEVELOPER_KEY = os.getenv("ARIZE_DEVELOPER_KEY")
 ARIZE_SPACE_ID = os.getenv("ARIZE_SPACE_ID")
-ARIZE_MODEL_ID = "sia"
+ARIZE_MODEL_ID = os.getenv("ARIZE_MODEL_ID")
 
 now = datetime.now()
 

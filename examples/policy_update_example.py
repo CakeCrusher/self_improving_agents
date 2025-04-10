@@ -9,7 +9,7 @@ from datetime import datetime
 
 from dotenv import load_dotenv
 
-from self_improving_agents.evaluator_handler.tracker import EvaluatorTracker
+from self_improving_agents.evaluator_handler.evaluator_saver import EvaluatorSaver
 from self_improving_agents.policy import LLMPolicyUpdater
 from self_improving_agents.runners.arize_connector import ArizeConnector
 from self_improving_agents.runners.data_collection_runner import DataCollectionRunner
@@ -22,12 +22,12 @@ logger = logging.getLogger(__name__)
 
 """Run the policy update example."""
 # Initialize components
-evaluator_tracker = EvaluatorTracker()
+evaluator_saver = EvaluatorSaver()
 arize_connector = ArizeConnector()
 
 # Initialize the data collection runner
 data_collector = DataCollectionRunner(
-    evaluator_tracker=evaluator_tracker,
+    evaluator_saver=evaluator_saver,
     arize_connector=arize_connector,
 )
 
