@@ -3,3 +3,4 @@ __pycache__
 explore/
 .venv/
 .sia/
+dist/

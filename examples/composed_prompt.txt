@@ -311,7 +311,7 @@ Provide a formatting consistency score (1-5) for the new rewritten version.
 
 # Evaluation Summary
 <EVALUATION_SUMMARY>
-- formatting_classify: Average score: N/A, Samples: 3
+
 </EVALUATION_SUMMARY>
 
 # Sample Examples (showing 2 of 3)
@@ -374,7 +374,7 @@ In summary, the intricate relationship between climate change and food security 
 ### Evaluations
 <EVALUATIONS>
 - formatting_classify: Score None
-  Reasoning: <EVAL_REASONING>None</EVAL_REASONING>
+  Reasoning: <EVAL_REASONING>The formatting of the rewritten version maintains a similar structure to the original, including the use of headings, subheadings, and block quotes. However, there are slight variations in the wording of headings and the overall presentation style, which could be seen as a deviation from the original formatting. Therefore, it is not a perfect match but retains a high level of consistency.</EVAL_REASONING>
 </EVALUATIONS>
 </SAMPLE_0>
 <SAMPLE_1>
@@ -406,7 +406,7 @@ In sum, Shakespeare’s unparalleled interrogation of language, character, and t
 ### Evaluations
 <EVALUATIONS>
 - formatting_classify: Score None
-  Reasoning: <EVAL_REASONING>None</EVAL_REASONING>
+  Reasoning: <EVAL_REASONING>The formatting of the rewritten version is significantly different from the original. The original text uses a standard paragraph format with clear sections and transitions, while the rewritten version employs bold headings and a more stylized structure. The use of bullet points in the original is absent in the rewritten version, which instead uses bolded phrases to introduce new sections. Overall, the differences in structure, headings, and presentation lead to a score of 1 for formatting consistency.</EVAL_REASONING>
 </EVALUATIONS>
 </SAMPLE_1>
 </SAMPLE_EXAMPLES>

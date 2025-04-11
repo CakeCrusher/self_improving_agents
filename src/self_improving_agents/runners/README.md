@@ -2,6 +2,8 @@
 
 This directory contains components for orchestrating the evaluation and optimization loops of the self-improving agents system.
 
+> Warining: add `.sia` to `.gitignore` your gitignore as it will contain your `space_id` and `model_id`
+
 ## WorkflowOrchestrator
 
 The `WorkflowOrchestrator` class streamlines the self-improvement workflow by tying together the evaluation pipeline, environment emulation, and policy updating components.

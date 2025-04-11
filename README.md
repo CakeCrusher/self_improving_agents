@@ -2,6 +2,7 @@
 
 A Python system for LLM prompt optimization.
 
+> Warining: add `.sia` to `.gitignore` your gitignore as it will contain your `space_id` and `model_id`
 ## Project Overview
 
 This project provides tools for evaluating and optimizing prompts for large language models (LLMs). It includes components for prompt evaluation, optimization, and testing.

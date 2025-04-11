@@ -5,20 +5,28 @@ build-backend = "hatchling.build"
 [project]
 name = "self_improving_agents"
 version = "0.1.0"
-description = "A Python system for LLM prompt optimization"
+description = "A system for self improving agents."
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [
     {name = "Your Name", email = "your.email@example.com"},
 ]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
 dependencies = [
     "arize>=7.36.1",
     "arize-otel>=0.8.0",
     "arize-phoenix-evals>=0.20.4",
     "pydantic>=2.11.2",
-    "wrapt>=1.15.0",
 ]
+
+[project.urls]
+"Homepage" = "https://github.com/CakeCrusher/self_improving_agents"
+"Bug Tracker" = "https://github.com/CakeCrusher/self_improving_agents/issues"
 
 [project.optional-dependencies]
 dev = [
@@ -60,5 +68,6 @@ python_files = "test_*.py"
 
 [dependency-groups]
 dev = [
-
+    "build>=1.2.2.post1",
+    "twine>=6.1.0",
 ]
