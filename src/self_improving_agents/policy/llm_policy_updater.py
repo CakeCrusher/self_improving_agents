@@ -24,7 +24,7 @@ class LLMPolicyUpdater(BasePolicy):
     def __init__(
         self,
         client: Optional[OpenAI] = None,
-        model: str = "gpt-4o-mini",
+        model: str = "gpt-4o",
         temperature: float = 0.7,
         max_tokens: int = 2048,
     ):
@@ -158,17 +158,20 @@ that would improve performance according to the evaluation metrics.
         summary = []
         for eval_name in eval_names:
             # Collect all scores for this evaluator
-            scores = []
+            scores: List[float] = []
             for sample in samples:
                 for eval_metric in sample.evals:
-                    if eval_metric.name == eval_name:
+                    if (
+                        eval_metric.name == eval_name
+                        and eval_metric.eval_score is not None
+                    ):
                         scores.append(eval_metric.eval_score)
 
             # Calculate statistics
             if scores:
                 avg_score: float | str = "N/A"
                 try:
-                    avg_score = sum([int(s) for s in scores]) / len(scores)
+                    avg_score = sum([float(s) for s in scores]) / len(scores)
                 except Exception as e:
                     logger.error(
                         f"Failed to calculate average score for {eval_name}: {e}"
@@ -255,7 +258,7 @@ that would improve performance according to the evaluation metrics.
             response_format=PolicyUpdate,
         )
 
-        print(
+        logger.info(
             "UPDATE THOUGHTS: ",
             json.dumps(response.choices[0].message.parsed.thoughts, indent=2),
         )

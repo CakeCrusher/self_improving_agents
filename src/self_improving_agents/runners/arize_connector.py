@@ -68,7 +68,7 @@ class ArizeConnector:
             start_time=start_date,
             end_time=end_date,
         )
-        primary_df = primary_df.head(limit)
+        primary_df = primary_df.tail(limit)
 
         return primary_df
 

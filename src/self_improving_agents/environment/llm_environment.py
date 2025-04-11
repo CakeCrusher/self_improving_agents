@@ -3,7 +3,6 @@
 This module provides a class for emulating LLM calls in a controlled environment,
 with instrumentation for tracking and analysis.
 """
-import json
 import logging
 import os
 from datetime import datetime
@@ -66,9 +65,6 @@ class LLMEnvironment:
                 "OPENAI_API_KEY not set, OpenAI client will use environment variables"
             )
 
-        # Initialize Arize tracking
-        self._initialize_arize_tracking()
-
         # Initialize OpenAI client
         self.openai_client = OpenAI(api_key=self.openai_api_key)
 
@@ -95,7 +91,7 @@ class LLMEnvironment:
         # Create checkpoint directory
         os.makedirs(self.checkpoint_dir, exist_ok=True)
 
-    def _initialize_arize_tracking(self) -> None:
+    def _initialize_arize_tracking(self) -> OpenAIInstrumentor:
         """Initialize Arize platform tracing."""
         if self.arize_space_id and self.arize_api_key:
             logger.info(
@@ -110,7 +106,10 @@ class LLMEnvironment:
 
             # Set up OpenAI instrumentation
             logger.info("Instrumenting OpenAI client")
-            OpenAIInstrumentor().instrument(tracer_provider=tracer_provider)
+
+            instrumentor = OpenAIInstrumentor()
+            instrumentor.instrument(tracer_provider=tracer_provider)
+            return instrumentor
         else:
             logger.warning(
                 "Skipping Arize tracer registration due to missing credentials"
@@ -174,6 +173,9 @@ class LLMEnvironment:
         Returns:
             Response from the LLM
         """
+
+        instrumentor = self._initialize_arize_tracking()
+
         # Create a snapshot
         snapshot = EnvironmentSnapshot(run_id=run_id)
 
@@ -186,16 +188,16 @@ class LLMEnvironment:
         results_metadatas = []
         model = state_actions.actions.model
         # TODO: Run this in parallel
-        for sample in state_actions.samples:
+        for index, sample in enumerate(state_actions.samples):
+            logger.info(f"Emulating LLM call for sample {index}")
             system_message = [
                 {
                     "role": "system",
                     "content": state_actions.actions.system_prompt,
                 }
             ]
+            logger.info(f"System message: {system_message}")
             messages = system_message + sample.chat_history
-            # print json formatted chat history
-            print(json.dumps(messages, indent=4))
 
             params = {
                 "model": model,
@@ -237,6 +239,8 @@ class LLMEnvironment:
                 }
             )
 
+        instrumentor.uninstrument()
+
         # Return the response
         return {
             "content": content,
@@ -252,10 +256,11 @@ class LLMEnvironment:
         evaluator: Callable,
         model: OpenAIModel,
         evaluator_name: str,
-        start_time: datetime,
-        end_time: datetime = datetime.now(),
+        start_time: Optional[datetime] = None,
+        end_time: Optional[datetime] = None,
         run_id: Optional[str] = None,
         upsert: bool = False,
+        limit: int = 100,
     ) -> Dict[str, Any]:
         """Emulate an evaluation using the specified evaluator and snapshot data.
 
@@ -311,12 +316,18 @@ class LLMEnvironment:
             evaluator_kwargs=eval_kwargs,
             get_telemetry_kwargs=get_telemetry_kwargs,
             upsert=upsert,
+            limit=limit,
+            start_date=start_time,
+            end_date=end_time,
         )
+
+        results_json = results.to_dict(orient="records")
 
         # End tracking with result metadata
         snapshot.end(
             {
                 "results_rows": len(results),
+                "results": results_json,
                 "evaluator_name": evaluator_name,
                 "success": True,
             }

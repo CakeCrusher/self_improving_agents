@@ -38,7 +38,6 @@ class BasePolicy(ABC):
         """
         # Create directory if it doesn't exist
         date_str = datetime.now().strftime("%Y%m%d%H%M%S")
-        print("SAVING CHECKPOINT")
 
         # Create the full path correctly
         checkpoint_dir = ".sia/checkpoint"

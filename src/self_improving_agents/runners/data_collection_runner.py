@@ -38,8 +38,8 @@ class DataCollectionRunner:
 
     def collect_data(
         self,
-        start_date: datetime,
-        end_date: Optional[datetime] = datetime.now(),
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
         evaluator_names: Optional[List[str]] = None,
         limit: int = 100,
     ) -> StateActions:
@@ -55,11 +55,17 @@ class DataCollectionRunner:
             List of state-action pairs
         """
         # Fetch telemetry data from Arize
-        telemetry_df = self.arize_connector.get_telemetry_data(
-            start_date=start_date, end_date=end_date, limit=limit
-        )
+        telemetry_args: Dict[str, Any] = {
+            "limit": limit,
+        }
+        if start_date is not None:
+            telemetry_args["start_date"] = start_date
+        if end_date is not None:
+            telemetry_args["end_date"] = end_date
+        telemetry_df = self.arize_connector.get_telemetry_data(**telemetry_args)
 
         telemetry_json = json.loads(telemetry_df.to_json(orient="records"))
+        # COULD BE GETTING RECORDS TRUNCATE END
 
         if not telemetry_json:
             raise ValueError("No telemetry data found")

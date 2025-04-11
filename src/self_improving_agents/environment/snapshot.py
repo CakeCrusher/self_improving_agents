@@ -146,8 +146,6 @@ class EnvironmentSnapshot:
             snapshot_files.sort(key=lambda f: os.path.getmtime(f))
             filepath = snapshot_files[-1]
 
-        print(f"Loading snapshot from {filepath}")
-
         # Ensure the file exists
         if not os.path.exists(filepath):
             raise FileNotFoundError(f"Snapshot file {filepath} does not exist")

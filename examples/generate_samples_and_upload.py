@@ -27,6 +27,9 @@ load_dotenv()
 ARIZE_SPACE_ID = os.getenv("ARIZE_SPACE_ID")
 ARIZE_API_KEY = os.getenv("ARIZE_API_KEY")
 ARIZE_MODEL_ID = os.getenv("ARIZE_MODEL_ID")
+print(f"ARIZE_SPACE_ID: {ARIZE_SPACE_ID}")
+print(f"ARIZE_API_KEY: {ARIZE_API_KEY}")
+print(f"ARIZE_MODEL_ID: {ARIZE_MODEL_ID}")
 
 print("\n\nREGISTERING TRACER PROVIDER")
 # Setup OTel via our convenience function

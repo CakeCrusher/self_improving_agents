@@ -1,7 +1,8 @@
 """
 Eval pipeline for formulaic evals
 """
-from typing import Any, Callable, Dict
+from datetime import datetime, timedelta
+from typing import Any, Callable, Dict, Optional
 
 import pandas as pd
 from arize.pandas.logger import Client
@@ -33,7 +34,10 @@ class EvalPipeline:
         evaluator_name: str,
         evaluator_kwargs: Dict[str, Any],
         get_telemetry_kwargs: Dict[str, Any],
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
         upsert: bool = False,
+        limit: int = 100,
     ) -> pd.DataFrame:
         """Execute complete evaluation pipeline.
 
@@ -43,14 +47,27 @@ class EvalPipeline:
             evaluator_kwargs: Arguments for the evaluator
             get_telemetry_kwargs: Arguments for getting telemetry data
             upsert: Whether to upload results to Arize
+            limit: Number of samples to run the evaluation on
 
         Returns:
             DataFrame containing evaluation results
         """
+        if start_date is not None:
+            get_telemetry_kwargs["start_time"] = start_date
+        else:
+            get_telemetry_kwargs["start_time"] = datetime.now() - timedelta(days=7)
+        if end_date is not None:
+            get_telemetry_kwargs["end_time"] = end_date
+        else:
+            get_telemetry_kwargs["end_time"] = datetime.now()
+
         # Get primary data from Arize
         primary_df = self.arize_connector.client.export_model_to_df(
             **get_telemetry_kwargs
         )
+
+        # limit the number of samples to run the evaluation on
+        primary_df = primary_df.tail(limit)
 
         # Run evaluation
         evals_df = evaluator(**evaluator_kwargs, dataframe=primary_df)

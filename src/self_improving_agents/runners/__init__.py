@@ -7,4 +7,9 @@ Classes:
     BaseRunner: Abstract base class for runners.
     SimpleRunner: Basic implementation of a runner.
     AsyncRunner: Asynchronous implementation of a runner.
+    WorkflowOrchestrator: Orchestrator for streamlining the self-improvement workflow.
 """
+
+from .orchestrator import WorkflowOrchestrator
+
+__all__ = ["WorkflowOrchestrator"]
